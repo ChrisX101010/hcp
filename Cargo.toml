@@ -1,15 +1,16 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/hcp-core",    # Core types: Bits<N>, Signal, Module, Port
-    "crates/hcp-ecc",     # ECC code generators (Hamming SEC-DED, etc.)
-    "crates/hcp-hdl",     # HDL compiler: AST → IR → ECC Pass → Verilog
-    "crates/hcp-package", # Phase 2: OCI-style hardware image packaging
-    "crates/hcp-cli",     # Command-line tool: `hcp build`, `hcp sim`, `hcp package`
+    "crates/hcp-core",     # Core types: Bits<N>, Signal, Module, Port
+    "crates/hcp-ecc",      # ECC code generators (Hamming SEC-DED, etc.)
+    "crates/hcp-hdl",      # HDL compiler: AST → IR → ECC Pass → Verilog
+    "crates/hcp-package",  # Phase 2: OCI-style hardware image packaging
+    "crates/hcp-protocol", # Phase 3: HCP protocol — JSON-RPC server + client
+    "crates/hcp-cli",      # Command-line tool
 ]
 
 [workspace.package]
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 license = "Apache-2.0"
 description = "Hardware Context Protocol — MCP for Hardware"

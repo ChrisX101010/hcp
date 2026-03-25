@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "package": {
+    "name": "counter-ecc",
+    "version": "0.3.0",
+    "description": "8-bit counter with ECC — built on Modli's shoulders",
+    "author": "Hristo",
+    "license": "Apache-2.0"
+  },
+  "ecc": {
+    "default_scheme": "hamming-secded",
+    "signals_protected": 1,
+    "total_parity_bits": 5,
+    "total_overhead_bits": 5,
+    "signal_details": [
+      {
+        "signal_name": "count",
+        "data_width": 8,
+        "encoded_width": 13,
+        "scheme": "Hamming SEC-DED",
+        "overhead_percent": 62.5
+      }
+    ]
+  },
+  "targets": [
+    {
+      "kind": "fpga",
+      "name": "ice40-hx8k",
+      "vendor": "lattice",
+      "prebuilt": false
+    },
+    {
+      "kind": "simulation",
+      "name": "verilator",
+      "prebuilt": false
+    },
+    {
+      "kind": "wasm",
+      "name": "browser",
+      "prebuilt": false
+    }
+  ],
+  "dependencies": [],
+  "layers": [
+    {
+      "layer_type": "GeneratedVerilog",
+      "digest": "sha256:57b96739c5f0d1b887ce9a90e968add70c697c7235e0c55102a7775d4dc7f029",
+      "size": 1681,
+      "media_type": "application/vnd.hcp.verilog.v1"
+    },
+    {
+      "layer_type": "GeneratedVerilog",
+      "digest": "sha256:8f7dc536d2418aa1f16bc1e8bfbb99c97c9feb71e856774651af1b9aa3e6dc11",
+      "size": 2117,
+      "media_type": "application/vnd.hcp.verilog.v1"
+    },
+    {
+      "layer_type": "GeneratedVerilog",
+      "digest": "sha256:80cb67ef0b03bbbac187c35c9cbe36b515c0df7d7052d8c55720e3843cbd6701",
+      "size": 1353,
+      "media_type": "application/vnd.hcp.verilog.v1"
+    },
+    {
+      "layer_type": "EccProofs",
+      "digest": "sha256:e998b9aaef75e86b18b6566c86e19254f8a325e8fad17d57b202e963aa6c6a48",
+      "size": 846,
+      "media_type": "application/vnd.hcp.ecc-report.v1"
+    }
+  ],
+  "annotations": {}
+}

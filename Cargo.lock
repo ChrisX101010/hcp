@@ -58,18 +58,20 @@ dependencies = [
 
 [[package]]
 name = "hcp-cli"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "hcp-core",
  "hcp-ecc",
  "hcp-hdl",
  "hcp-package",
+ "hcp-protocol",
+ "serde_json",
  "thiserror",
 ]
 
 [[package]]
 name = "hcp-core"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "serde",
  "thiserror",
@@ -77,7 +79,7 @@ dependencies = [
 
 [[package]]
 name = "hcp-ecc"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "hcp-core",
  "thiserror",
@@ -85,7 +87,7 @@ dependencies = [
 
 [[package]]
 name = "hcp-hdl"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "hcp-core",
  "hcp-ecc",
@@ -94,11 +96,23 @@ dependencies = [
 
 [[package]]
 name = "hcp-package"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "hcp-core",
  "hcp-ecc",
  "hcp-hdl",
+ "serde",
+ "serde_json",
+ "sha2",
+ "thiserror",
+]
+
+[[package]]
+name = "hcp-protocol"
+version = "0.3.0"
+dependencies = [
+ "hcp-core",
+ "hcp-package",
  "serde",
  "serde_json",
  "sha2",

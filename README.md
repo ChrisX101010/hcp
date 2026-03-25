@@ -165,51 +165,51 @@ of the Galaksija movement — the belief that powerful technology belongs to eve
 *"Galaksija stands tall as a monument to a different kind of technological life,
 one teeming with exploration, experimentation, and communitarian spirit."*
 
-## Setup Guide (WSL / Linux / macOS)
+## Setup Guide
 
 ### Prerequisites
 
 - **Rust toolchain** (rustc + cargo): https://rustup.rs
-- **Git** (to clone and version-control your work)
+- **Git**: to clone and version-control your work
 - **Optional**: Yosys + nextpnr + icestorm (for actual FPGA synthesis)
 
-### Quick Start on WSL (Windows Subsystem for Linux)
+### Quick Start
 
 ```bash
-# Step 1: Open your WSL terminal (Ubuntu recommended)
-# If you downloaded hcp-phase1.tar.gz to Windows Downloads:
-cp /mnt/c/Users/YOUR_USERNAME/Downloads/hcp-phase1.tar.gz ~/
-
-# Step 2: Extract
-cd ~
-tar xzf hcp-phase1.tar.gz
+# Clone the repo
+git clone https://github.com/ChrisX101010/hcp.git
 cd hcp
 
-# Step 3: Install Rust (if not already installed)
+# Install Rust if you don't have it
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source ~/.cargo/env
 
-# Step 4: Build everything
+# Build everything
 cargo build --workspace
 
-# Step 5: Run all 22 tests
+# Run all 30 tests
 cargo test --workspace
 
-# Step 6: Run the demo (see ECC analysis + Verilog generation)
+# Run the full demo (ECC analysis → Verilog generation → OCI packaging)
 cargo run -p hcp-cli
 
-# Step 7: Build optimized release binary
+# Build optimized release binary (~13MB, runs in ~3MB RAM)
 cargo build --release -p hcp-cli
 ./target/release/hcp
 ```
 
+Works on Linux, macOS, and Windows (via WSL or native `cargo`).
+
 ### Optional: Install FPGA Toolchain
 
 ```bash
-# For actually synthesizing to iCE40 FPGAs ($5-$30 boards)
+# Linux (apt)
 sudo apt install yosys nextpnr-ice40 fpga-icestorm
 
-# Then you can take the generated .sv files and synthesize:
+# macOS (homebrew)
+brew install yosys nextpnr icestorm
+
+# Then synthesize the generated Verilog for a real FPGA:
 # yosys -p 'read_verilog counter_ecc.sv; synth_ice40 -top counter_ecc'
 ```
 

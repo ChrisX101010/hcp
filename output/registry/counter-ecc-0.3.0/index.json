@@ -1,0 +1,14 @@
+{
+  "manifests": [
+    {
+      "annotations": {
+        "hcp.ecc.signals_protected": "1",
+        "org.opencontainers.image.ref.name": "counter-ecc:0.3.0"
+      },
+      "digest": "sha256:3abd7d86a6dd7f355db48e6bb43acbad02945e5f1f16de6379776b6064832314",
+      "mediaType": "application/vnd.hcp.manifest.v1+json",
+      "size": 1801
+    }
+  ],
+  "schemaVersion": 2
+}
