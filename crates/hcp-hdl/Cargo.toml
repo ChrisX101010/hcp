@@ -1,0 +1,11 @@
+[package]
+name = "hcp-hdl"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "HDL compiler — Module → ECC Pass → Verilog output"
+
+[dependencies]
+hcp-core = { path = "../hcp-core" }
+hcp-ecc = { path = "../hcp-ecc" }
+thiserror.workspace = true

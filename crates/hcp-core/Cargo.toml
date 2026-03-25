@@ -1,0 +1,10 @@
+[package]
+name = "hcp-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Core types for HCP — bits, signals, ports, modules"
+
+[dependencies]
+thiserror.workspace = true
+serde.workspace = true

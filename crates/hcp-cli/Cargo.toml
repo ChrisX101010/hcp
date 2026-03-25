@@ -1,0 +1,17 @@
+[package]
+name = "hcp-cli"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "HCP command-line tool — build, simulate, and deploy hardware"
+
+[[bin]]
+name = "hcp"
+path = "src/main.rs"
+
+[dependencies]
+hcp-core = { path = "../hcp-core" }
+hcp-ecc = { path = "../hcp-ecc" }
+hcp-hdl = { path = "../hcp-hdl" }
+hcp-package = { path = "../hcp-package" }
+thiserror.workspace = true

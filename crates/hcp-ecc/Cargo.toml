@@ -1,0 +1,10 @@
+[package]
+name = "hcp-ecc"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "ECC code generators — Hamming SEC-DED, parity, TMR"
+
+[dependencies]
+hcp-core = { path = "../hcp-core" }
+thiserror.workspace = true

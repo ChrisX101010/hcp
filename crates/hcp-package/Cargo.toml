@@ -1,0 +1,15 @@
+[package]
+name = "hcp-package"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "OCI-style hardware image packaging — the Modli layer"
+
+[dependencies]
+hcp-core = { path = "../hcp-core" }
+hcp-ecc = { path = "../hcp-ecc" }
+hcp-hdl = { path = "../hcp-hdl" }
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
