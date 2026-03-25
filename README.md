@@ -114,7 +114,7 @@ This Verilog can be fed directly into:
 | Phase | What | When |
 |-------|------|------|
 | **1 ✅** | HDL compiler + ECC pass + Verilog backend | Done |
-| **2** | OCI hardware images — `hcp package`, `hcp push/pull` | Next |
+| **2 ✅** | OCI hardware images — packaging, SHA-256 integrity, manifest | Done |
 | **3** | HCP protocol server (JSON-RPC, like MCP but for hardware) | After 2 |
 | **4** | Lightweight virtualization — WASM sim, Verilator JIT, Docker containers | After 3 |
 | **5** | P2P hardware mesh — share FPGA resources over network | After 4 |
