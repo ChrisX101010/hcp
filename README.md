@@ -53,9 +53,21 @@ hcp/
 │   │       ├── lib.rs
 │   │       ├── ecc_pass.rs       # ⭐ ECC compiler pass — the core innovation
 │   │       └── verilog.rs        # SystemVerilog code emitter
+│   ├── hcp-package/              # Phase 2: OCI hardware image packaging
+│   │   └── src/
+│   │       ├── manifest.rs       # hcp.json — package metadata + ECC report
+│   │       ├── image.rs          # OCI Image Layout with SHA-256 content addressing
+│   │       └── builder.rs        # ⭐ One-command pipeline: Module → ECC → Verilog → OCI image
+│   ├── hcp-protocol/             # Phase 3: JSON-RPC 2.0 protocol server
+│   │   └── src/
+│   │       ├── jsonrpc.rs        # ⭐ JSON-RPC 2.0 wire protocol (same as MCP)
+│   │       ├── messages.rs       # 10 protocol methods (initialize, pull, deploy, etc.)
+│   │       ├── registry.rs       # Image registry — stores and serves hardware images
+│   │       ├── server.rs         # HCP server — routes JSON-RPC to handlers
+│   │       └── client.rs         # HCP client — typed Rust API wrapping JSON-RPC
 │   └── hcp-cli/                  # Command-line tool
 │       └── src/
-│           └── main.rs           # Demo: full pipeline from module → ECC → Verilog
+│           └── main.rs           # Demo: full Phase 1+2+3 lifecycle
 ```
 
 ### What the ⭐ starred files do:
@@ -115,7 +127,7 @@ This Verilog can be fed directly into:
 |-------|------|------|
 | **1 ✅** | HDL compiler + ECC pass + Verilog backend | Done |
 | **2 ✅** | OCI hardware images — packaging, SHA-256 integrity, manifest | Done |
-| **3** | HCP protocol server (JSON-RPC, like MCP but for hardware) | After 2 |
+| **3 ✅** | HCP protocol server (JSON-RPC 2.0, image registry, client/server) | Done |
 | **4** | Lightweight virtualization — WASM sim, Verilator JIT, Docker containers | After 3 |
 | **5** | P2P hardware mesh — share FPGA resources over network | After 4 |
 
@@ -187,8 +199,8 @@ source ~/.cargo/env
 # Build everything
 cargo build --workspace
 
-# Run all 30 tests
-cargo test --workspace
+# Run all 47 tests
+cargo test --workspace -- --test-threads=1
 
 # Run the full demo (ECC analysis → Verilog generation → OCI packaging)
 cargo run -p hcp-cli
@@ -198,7 +210,7 @@ cargo build --release -p hcp-cli
 ./target/release/hcp
 ```
 
-Works on Linux, macOS, and Windows (via WSL or native `cargo`).
+Works on Linux and macOS.
 
 ### Optional: Install FPGA Toolchain
 
