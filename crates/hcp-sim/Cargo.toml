@@ -1,0 +1,11 @@
+[package]
+name = "hcp-sim"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Cycle-accurate hardware simulator with ECC error injection and VCD waveform export"
+
+[dependencies]
+hcp-core = { path = "../hcp-core" }
+hcp-ecc = { path = "../hcp-ecc" }
+thiserror.workspace = true

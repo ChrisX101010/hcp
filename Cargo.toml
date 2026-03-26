@@ -6,11 +6,12 @@ members = [
     "crates/hcp-hdl",      # HDL compiler: AST → IR → ECC Pass → Verilog
     "crates/hcp-package",  # Phase 2: OCI-style hardware image packaging
     "crates/hcp-protocol", # Phase 3: HCP protocol — JSON-RPC server + client
+    "crates/hcp-sim",      # Phase 4: Cycle-accurate hardware simulator
     "crates/hcp-cli",      # Command-line tool
 ]
 
 [workspace.package]
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 license = "Apache-2.0"
 description = "Hardware Context Protocol — MCP for Hardware"

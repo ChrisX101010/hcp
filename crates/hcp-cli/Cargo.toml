@@ -15,5 +15,6 @@ hcp-ecc = { path = "../hcp-ecc" }
 hcp-hdl = { path = "../hcp-hdl" }
 hcp-package = { path = "../hcp-package" }
 hcp-protocol = { path = "../hcp-protocol" }
+hcp-sim = { path = "../hcp-sim" }
 thiserror.workspace = true
 serde_json.workspace = true
