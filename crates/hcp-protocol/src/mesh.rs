@@ -86,10 +86,7 @@ impl MeshNode {
 
     async fn advertise(&self) -> anyhow::Result<()> {
         let daemon = ServiceDaemon::new()?;
-        
-        // FIX: mdns-sd explicitly requires FQDN ending with '.local.'
         let safe_host = "hcp-node.local.";
-        
         let sys_hostname = std::env::var("HOSTNAME")
             .or_else(|_| std::env::var("COMPUTERNAME"))
             .unwrap_or_else(|_| "localhost".to_string());
@@ -125,13 +122,17 @@ impl MeshNode {
         loop {
             match browser.recv_timeout(Duration::from_secs(1)) {
                 Ok(ServiceEvent::ServiceResolved(info)) => {
-                    if let Some(prop) = info.get_properties().get("advert") {
-                        if let Some(val_bytes) = prop.val() {
-                            if let Ok(val_str) = std::str::from_utf8(val_bytes) {
-                                if let Ok(adv) = serde_json::from_str::<NodeAdvertisement>(val_str) {
-                                    if adv.node_id != self.id && !seen.contains(&adv.node_id) {
-                                        seen.insert(adv.node_id.clone());
-                                        let _ = self.connect_to_peer(&adv).await;
+                    // FIX: Use the actual resolved network IP, not the local hostname
+                    if let Some(ip) = info.get_addresses().iter().next() {
+                        if let Some(prop) = info.get_properties().get("advert") {
+                            if let Some(val_bytes) = prop.val() {
+                                if let Ok(val_str) = std::str::from_utf8(val_bytes) {
+                                    if let Ok(mut adv) = serde_json::from_str::<NodeAdvertisement>(val_str) {
+                                        adv.hostname = ip.to_string(); // Override with real IP
+                                        if adv.node_id != self.id && !seen.contains(&adv.node_id) {
+                                            seen.insert(adv.node_id.clone());
+                                            let _ = self.connect_to_peer(&adv).await;
+                                        }
                                     }
                                 }
                             }
