@@ -35,7 +35,6 @@
 //! but HCP tools use it for hardware-specific metadata.
 
 use sha2::{Digest, Sha256};
-use std::collections::HashMap;
 use std::fs;
 use std::path::{Path, PathBuf};
 

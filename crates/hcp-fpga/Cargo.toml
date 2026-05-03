@@ -1,0 +1,16 @@
+[package]
+name = "hcp-fpga"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Phase 5: FPGA deployment via Yosys/nextpnr"
+
+[dependencies]
+hcp-core = { path = "../hcp-core" }
+hcp-package = { path = "../hcp-package" }
+hcp-protocol = { path = "../hcp-protocol" }
+thiserror.workspace = true
+tracing.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true

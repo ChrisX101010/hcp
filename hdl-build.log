@@ -1,0 +1,9 @@
+   Compiling syn v2.0.117
+   Compiling thiserror-impl v1.0.69
+   Compiling serde_derive v1.0.228
+   Compiling thiserror v1.0.69
+   Compiling serde v1.0.228
+   Compiling hcp-core v0.4.0 (/home/h/hcp/crates/hcp-core)
+   Compiling hcp-ecc v0.4.0 (/home/h/hcp/crates/hcp-ecc)
+   Compiling hcp-hdl v0.4.0 (/home/h/hcp/crates/hcp-hdl)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 4.75s

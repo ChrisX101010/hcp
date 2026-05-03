@@ -1,24 +1,65 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/hcp-core",     # Core types: Bits<N>, Signal, Module, Port
-    "crates/hcp-ecc",      # ECC code generators (Hamming SEC-DED, etc.)
-    "crates/hcp-hdl",      # HDL compiler: AST → IR → ECC Pass → Verilog
-    "crates/hcp-package",  # Phase 2: OCI-style hardware image packaging
-    "crates/hcp-protocol", # Phase 3: HCP protocol — JSON-RPC server + client
-    "crates/hcp-sim",      # Phase 4: Cycle-accurate hardware simulator
-    "crates/hcp-cli",      # Command-line tool
+ "crates/hcp-core",
+ "crates/hcp-ecc",
+ "crates/hcp-hdl",
+ "crates/hcp-package",
+ "crates/hcp-protocol",
+ "crates/hcp-sim",
+ "crates/hcp-cli",
+ "crates/hcp-fpga",
 ]
 
 [workspace.package]
 version = "0.4.0"
 edition = "2021"
-license = "Apache-2.0"
-description = "Hardware Context Protocol — MCP for Hardware"
+license = "MIT OR Apache-2.0"
+authors = ["Hristo <ChrisX101010>"]
+description = "Hardware Context Protocol — ECC-protected hardware compilation, packaging, and deployment"
+repository = "https://github.com/ChrisX101010/hcp"
 
 [workspace.dependencies]
-# Shared across all crates
-thiserror = "2"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+# Error handling
+thiserror = "1.0"
+anyhow = "1.0"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# Async runtime
+tokio = { version = "1", features = ["full", "signal", "macros"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }
+
+# Cryptography & integrity
 sha2 = "0.10"
+hex = "0.4"
+
+# CLI
+clap = { version = "4.5", features = ["derive", "cargo", "env"] }
+clap_complete = "4.5"
+indicatif = "0.17"
+console = "0.15"
+
+# Networking (for P2P mesh)
+mdns-sd = "0.13"
+uuid = { version = "1.8", features = ["v4", "serde"] }
+
+# HTTP/Protocol
+reqwest = { version = "0.12", features = ["json", "stream"] }
+hyper = { version = "1.0", features = ["full"] }
+jsonrpc-v2 = "0.12"
+
+# OCI/Distribution
+oci-spec = "0.6"
+tar = "0.4"
+flate2 = "1.0"
+tempfile = "3.10"
+
+# Testing
+proptest = "1.4"
+rstest = "0.19"
