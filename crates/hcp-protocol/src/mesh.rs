@@ -35,6 +35,7 @@ pub struct MeshNode {
     registry: Arc<ImageRegistry>,
     peers: Arc<Mutex<HashMap<String, PeerState>>>,
     tx: broadcast::Sender<Message>,
+    initial_peers: Vec<String>,
 }
 
 #[allow(dead_code)]
@@ -52,13 +53,38 @@ impl MeshNode {
             registry,
             peers: Arc::new(Mutex::new(HashMap::new())),
             tx,
+            initial_peers: Vec::new(),
         }
+    }
+
+    pub fn add_initial_peer(&mut self, addr: String) {
+        self.initial_peers.push(addr);
     }
 
     pub async fn run(self) -> anyhow::Result<()> {
         let node = Arc::new(self);
         let listener = TcpListener::bind(("0.0.0.0", node.port)).await?;
         info!("HCP mesh listening on 0.0.0.0:{}", node.port);
+
+        // Connect to manually specified peers
+        let init_peers = node.initial_peers.clone();
+        let node_clone = node.clone();
+        tokio::spawn(async move {
+            for addr in init_peers {
+                let parts: Vec<&str> = addr.split(':').collect();
+                if parts.len() == 2 {
+                    let adv = NodeAdvertisement {
+                        node_id: "manual".to_string(),
+                        hostname: parts[0].to_string(),
+                        port: parts[1].parse().unwrap_or(8080),
+                        capabilities: vec![],
+                    };
+                    if let Err(e) = node_clone.connect_to_peer(&adv).await {
+                        warn!("Failed to connect to manual peer {}: {}", addr, e);
+                    }
+                }
+            }
+        });
 
         let adv = node.clone();
         tokio::spawn(async move { if let Err(e) = adv.advertise().await { error!("mDNS advertise: {}", e); } });
@@ -122,13 +148,12 @@ impl MeshNode {
         loop {
             match browser.recv_timeout(Duration::from_secs(1)) {
                 Ok(ServiceEvent::ServiceResolved(info)) => {
-                    // FIX: Use the actual resolved network IP, not the local hostname
                     if let Some(ip) = info.get_addresses().iter().next() {
                         if let Some(prop) = info.get_properties().get("advert") {
                             if let Some(val_bytes) = prop.val() {
                                 if let Ok(val_str) = std::str::from_utf8(val_bytes) {
                                     if let Ok(mut adv) = serde_json::from_str::<NodeAdvertisement>(val_str) {
-                                        adv.hostname = ip.to_string(); // Override with real IP
+                                        adv.hostname = ip.to_string();
                                         if adv.node_id != self.id && !seen.contains(&adv.node_id) {
                                             seen.insert(adv.node_id.clone());
                                             let _ = self.connect_to_peer(&adv).await;
