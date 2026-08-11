@@ -1,0 +1,16 @@
+[package]
+name = "hcp-fabric"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "Consent-based, transport-agnostic fabric-sharing protocol for HCP"
+license = "Apache-2.0"
+repository = "https://github.com/ChrisX101010/hcp"
+keywords = ["fpga", "mesh", "reconfigurable", "hardware", "p2p"]
+categories = ["hardware-support", "network-programming"]
+
+[dependencies]
+
+[[example]]
+name = "handshake"
+path = "examples/handshake.rs"

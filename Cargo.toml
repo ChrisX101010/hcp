@@ -1,6 +1,8 @@
 [workspace]
 resolver = "2"
 members = [
+ "crates/hcp-fabric",
+ "crates/hcp-crypto",
  "crates/hcp-core",
  "crates/hcp-ecc",
  "crates/hcp-hdl",

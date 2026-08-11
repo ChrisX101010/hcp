@@ -356,12 +356,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "hcp-crypto"
+version = "0.1.0"
+
+[[package]]
 name = "hcp-ecc"
 version = "0.4.0"
 dependencies = [
  "hcp-core",
  "thiserror",
 ]
+
+[[package]]
+name = "hcp-fabric"
+version = "0.1.0"
 
 [[package]]
 name = "hcp-fpga"

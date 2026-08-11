@@ -1,0 +1,17 @@
+[package]
+name = "hcp-crypto"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "AES cryptographic accelerator generators for HCP (Hardware Context Protocol)"
+license = "Apache-2.0"
+repository = "https://github.com/ChrisX101010/hcp"
+keywords = ["fpga", "verilog", "aes", "hardware", "hdl"]
+categories = ["hardware-support"]
+
+# Dependency-free by design, like hcp-ecc: generators are pure functions.
+[dependencies]
+
+[[example]]
+name = "emit"
+path = "examples/emit.rs"
