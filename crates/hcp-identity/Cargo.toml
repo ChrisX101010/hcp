@@ -1,0 +1,20 @@
+[package]
+name = "hcp-identity"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+description = "Ed25519 node identity, signing, and trust store for HCP"
+license = "Apache-2.0"
+repository = "https://github.com/ChrisX101010/hcp"
+
+[dependencies]
+hcp-fabric = { path = "../hcp-fabric" }
+ed25519-dalek = { version = "=2.1.1", default-features = false, features = ["rand_core"] }
+rand_core = { version = "0.6", features = ["getrandom"] }
+
+# Pin transitive deps to versions that build on Rust 1.75 (avoid edition2024).
+zeroize = "=1.7.0"
+
+[[example]]
+name = "paired_handshake"
+path = "examples/paired_handshake.rs"
