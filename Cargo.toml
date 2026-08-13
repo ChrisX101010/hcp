@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+ "crates/hcp-mesh",
  "crates/hcp-link",
  "crates/hcp-gcm",
  "crates/hcp-identity",

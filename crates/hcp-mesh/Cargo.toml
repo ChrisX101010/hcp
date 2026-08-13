@@ -1,0 +1,15 @@
+[package]
+name = "hcp-mesh"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "Consent-based mesh topology and routing for HCP (no scanning)"
+license = "Apache-2.0"
+repository = "https://github.com/ChrisX101010/hcp"
+
+[dependencies]
+hcp-fabric = { path = "../hcp-fabric" }
+
+[[example]]
+name = "mesh_map"
+path = "examples/mesh_map.rs"
