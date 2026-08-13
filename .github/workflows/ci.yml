@@ -1,0 +1,59 @@
+name: hcp
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build-and-test:
+    name: build + test workspace
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Format check
+        run: cargo fmt --all -- --check
+
+      - name: Build workspace
+        run: cargo build --workspace
+
+      - name: Test workspace
+        run: cargo test --workspace
+
+  hardware:
+    name: simulate + synthesize AES core
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install HDL toolchain
+        run: sudo apt-get update && sudo apt-get install -y iverilog yosys
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Generate + simulate AES core against FIPS-197
+        env:
+          HCP_REQUIRE_IVERILOG: "1"
+        run: cargo test -p hcp-crypto
+      - name: Synthesize for iCE40
+        run: |
+          cargo run -p hcp-crypto --example emit > /tmp/aes.sv
+          yosys -p "read_verilog -sv /tmp/aes.sv; synth_ice40 -top aes128_enc; stat" \
+            2>&1 | awk '/=== aes128_enc ===/{n++} n==2' | head -20

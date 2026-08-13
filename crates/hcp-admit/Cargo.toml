@@ -1,0 +1,11 @@
+[package]
+name = "hcp-admit"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "Bitstream admission control for HCP — the host's policy gate before placement"
+license = "Apache-2.0"
+repository = "https://github.com/ChrisX101010/hcp"
+keywords = ["fpga", "security", "policy", "faas", "admission"]
+
+[dependencies]
