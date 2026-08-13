@@ -1,4 +1,0 @@
-   Compiling hcp-protocol v0.4.0 (/home/h/hcp/crates/hcp-protocol)
-   Compiling hcp-fpga v0.4.0 (/home/h/hcp/crates/hcp-fpga)
-   Compiling hcp-cli v0.4.0 (/home/h/hcp/crates/hcp-cli)
-    Finished `release` profile [optimized] target(s) in 4.70s

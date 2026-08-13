@@ -4,7 +4,7 @@ use clap::{Parser, Subcommand};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 mod commands;
-use commands::{CompileCmd, PackageCmd, ServeCmd, SimulateCmd, FpgaCmd, NodeCmd};
+use commands::{CompileCmd, FpgaCmd, NodeCmd, PackageCmd, ServeCmd, SimulateCmd};
 
 /// Hardware Context Protocol — MCP for Hardware
 #[derive(Parser)]
@@ -30,7 +30,9 @@ enum Commands {
     Fpga(FpgaCmd),
     #[command(subcommand)]
     Node(NodeCmd),
-    Completion { shell: clap_complete::Shell },
+    Completion {
+        shell: clap_complete::Shell,
+    },
     Demo,
 }
 
@@ -38,7 +40,10 @@ fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
     let log_level = if cli.verbose { "debug" } else { "info" };
     tracing_subscriber::registry()
-        .with(tracing_subscriber::EnvFilter::new(format!("hcp={}", log_level)))
+        .with(tracing_subscriber::EnvFilter::new(format!(
+            "hcp={}",
+            log_level
+        )))
         .with(tracing_subscriber::fmt::layer().with_target(false))
         .init();
 
@@ -64,7 +69,10 @@ fn main() -> anyhow::Result<()> {
 
 fn print_banner() {
     println!("╔══════════════════════════════════════════════════════════════════╗");
-    println!("║     HCP — Hardware Context Protocol v{}                      ║", env!("CARGO_PKG_VERSION"));
+    println!(
+        "║     HCP — Hardware Context Protocol v{}                      ║",
+        env!("CARGO_PKG_VERSION")
+    );
     println!("║     Compile → Package → Serve → Simulate → Deploy               ║");
     println!("║                                                                  ║");
     println!("║     Dedicated to the memory of Zoran Modli (1948-2020)           ║");

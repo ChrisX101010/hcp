@@ -186,7 +186,8 @@ impl HammingGenerator {
         m.add_output("syndrome", self.parity_bits);
 
         // Internal: corrected codeword
-        m.signals.push(Signal::wire("corrected", self.total_width - 1));
+        m.signals
+            .push(Signal::wire("corrected", self.total_width - 1));
         m.signals.push(Signal::wire("overall_parity", 1));
         m.signals.push(Signal::wire("syndrome_nonzero", 1));
 
@@ -370,10 +371,14 @@ mod tests {
 
         assert_eq!(enc.name, "hamming_enc_8");
         // Should have input port and output port
-        assert!(enc.ports.iter().any(|p| p.signal.name == "data_in"
-            && p.signal.width.bits() == 8));
-        assert!(enc.ports.iter().any(|p| p.signal.name == "encoded_out"
-            && p.signal.width.bits() == 13));
+        assert!(enc
+            .ports
+            .iter()
+            .any(|p| p.signal.name == "data_in" && p.signal.width.bits() == 8));
+        assert!(enc
+            .ports
+            .iter()
+            .any(|p| p.signal.name == "encoded_out" && p.signal.width.bits() == 13));
     }
 
     #[test]
@@ -384,7 +389,10 @@ mod tests {
         assert_eq!(dec.name, "hamming_dec_8");
         // Should have error flag outputs
         assert!(dec.ports.iter().any(|p| p.signal.name == "err_correctable"));
-        assert!(dec.ports.iter().any(|p| p.signal.name == "err_uncorrectable"));
+        assert!(dec
+            .ports
+            .iter()
+            .any(|p| p.signal.name == "err_uncorrectable"));
         assert!(dec.ports.iter().any(|p| p.signal.name == "syndrome"));
     }
 

@@ -1,5 +1,5 @@
-use clap::Args;
 use anyhow::Result;
+use clap::Args;
 
 /// Compile HDL source with ECC protection
 #[derive(Args, Debug)]
@@ -23,20 +23,16 @@ pub struct CompileCmd {
 
 pub fn run(cmd: CompileCmd, output_dir: &str) -> Result<()> {
     tracing::info!("Compiling with ECC scheme: {}", cmd.ecc);
-    
+
     // Delegate to hcp-hdl crate
-    let result = hcp_hdl::compile(
-        cmd.input.as_deref(),
-        &cmd.ecc,
-        cmd.width,
-        output_dir,
-    )?;
-    
-    println!("✓ Compiled {} → {} (ECC overhead: {:.1}%)", 
+    let result = hcp_hdl::compile(cmd.input.as_deref(), &cmd.ecc, cmd.width, output_dir)?;
+
+    println!(
+        "✓ Compiled {} → {} (ECC overhead: {:.1}%)",
         cmd.input.as_deref().unwrap_or("inline module"),
         result.verilog_path,
         result.ecc_overhead_pct
     );
-    
+
     Ok(())
 }

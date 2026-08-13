@@ -1,5 +1,5 @@
-use clap::Args;
 use anyhow::Result;
+use clap::Args;
 
 #[derive(Args, Debug)]
 pub struct ServeCmd {

@@ -1,0 +1,15 @@
+[package]
+name = "hcp-gcm"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "AES-128-GCM authenticated encryption for HCP (dependency-free, NIST-verified)"
+license = "Apache-2.0"
+repository = "https://github.com/ChrisX101010/hcp"
+keywords = ["aes", "gcm", "aead", "encryption", "crypto"]
+
+[dependencies]
+
+[[example]]
+name = "encrypt_image"
+path = "examples/encrypt_image.rs"

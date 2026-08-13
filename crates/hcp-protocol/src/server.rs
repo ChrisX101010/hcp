@@ -17,12 +17,25 @@ pub async fn run_server(registry: Arc<ImageRegistry>, bind: &str) -> std::io::Re
                     let method = req["method"].as_str().unwrap_or("");
                     let id = &req["id"];
                     let resp = match method {
-                        "hcp.ping" => json!({"jsonrpc":"2.0","result":{"server":"hcp-server","status":"ok"},"id":id}),
+                        "hcp.ping" => {
+                            json!({"jsonrpc":"2.0","result":{"server":"hcp-server","status":"ok"},"id":id})
+                        }
                         "hcp.list" => {
-                            let imgs = reg.list().iter().map(|i| format!("{}:{} by Hristo — 3 target(s), {} ECC signal(s)", i.name, i.version, i.ecc_signals)).collect::<Vec<_>>();
+                            let imgs = reg
+                                .list()
+                                .iter()
+                                .map(|i| {
+                                    format!(
+                                        "{}:{} by Hristo — 3 target(s), {} ECC signal(s)",
+                                        i.name, i.version, i.ecc_signals
+                                    )
+                                })
+                                .collect::<Vec<_>>();
                             json!({"jsonrpc":"2.0","result":{"images":imgs},"id":id})
                         }
-                        _ => json!({"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found"},"id":id})
+                        _ => {
+                            json!({"jsonrpc":"2.0","error":{"code":-32601,"message":"Method not found"},"id":id})
+                        }
                     };
                     let out = serde_json::to_string(&resp).unwrap();
                     let _ = socket.write_all(out.as_bytes()).await;

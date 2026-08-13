@@ -1,5 +1,5 @@
-use clap::{Args, Subcommand};
 use anyhow::Result;
+use clap::{Args, Subcommand};
 
 #[derive(Subcommand, Debug)]
 pub enum FpgaCmd {
@@ -23,8 +23,12 @@ pub fn run(cmd: FpgaCmd, _output_dir: &str) -> Result<()> {
     match cmd {
         FpgaCmd::Deploy(deploy) => {
             println!("🚀 Deploying to {} board...", deploy.board);
-            if deploy.flash { println!("💾 Flashing bitstream..."); }
-            if deploy.verify { println!("✅ Verifying ECC in hardware..."); }
+            if deploy.flash {
+                println!("💾 Flashing bitstream...");
+            }
+            if deploy.verify {
+                println!("✅ Verifying ECC in hardware...");
+            }
         }
         FpgaCmd::List => {
             println!("Supported boards:");

@@ -1,5 +1,5 @@
-use clap::Args;
 use anyhow::Result;
+use clap::Args;
 
 /// Run cycle-accurate simulation with ECC fault injection
 #[derive(Args, Debug)]
@@ -18,14 +18,14 @@ pub struct SimulateCmd {
 
 pub fn run(cmd: SimulateCmd, output_dir: &str) -> Result<()> {
     tracing::info!("Running {}-cycle simulation...", cmd.cycles);
-    
+
     // Delegate to hcp-sim crate (stub for now)
     let _ = (cmd.module, output_dir); // Suppress unused warnings
-    
+
     println!("✓ Simulation complete: {} cycles", cmd.cycles);
     if cmd.inject_errors {
         println!("⚠️  ECC fault injection enabled (stub)");
     }
-    
+
     Ok(())
 }

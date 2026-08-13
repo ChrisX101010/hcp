@@ -1,2 +1,7 @@
 target/
 output/
+
+# build artifacts
+build.log
+hdl-build.log
+target/

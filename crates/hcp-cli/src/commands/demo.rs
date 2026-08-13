@@ -1,14 +1,17 @@
 use anyhow::Result;
-use indicatif::ProgressBar;
 use console::style;
+use indicatif::ProgressBar;
 
 pub fn run(output_dir: &str) -> Result<()> {
     print_banner();
 
     let pb = ProgressBar::new_spinner();
-    pb.set_style(indicatif::ProgressStyle::default_spinner()
-        .tick_strings(&["░", "█", "░", "▓", "░", "█"])
-        .template("{spinner:.blue} {msg}").unwrap());
+    pb.set_style(
+        indicatif::ProgressStyle::default_spinner()
+            .tick_strings(&["░", "█", "░", "▓", "░", "█"])
+            .template("{spinner:.blue} {msg}")
+            .unwrap(),
+    );
 
     // Phase 1
     pb.set_message("PHASE 1: Compiling Hardware with ECC...");
@@ -29,7 +32,10 @@ pub fn run(output_dir: &str) -> Result<()> {
     println!("  Size:  5997 bytes");
     println!("  ECC:   1 signals protected");
     println!("  ✓ All 4 layers verified OK\n");
-    pb.finish_with_message(format!("{} Packaged as OCI-compatible hardware image", style("✓").green()));
+    pb.finish_with_message(format!(
+        "{} Packaged as OCI-compatible hardware image",
+        style("✓").green()
+    ));
 
     // Phase 3
     pb.set_message("PHASE 3: Serving via HCP Protocol...");
@@ -43,7 +49,10 @@ pub fn run(output_dir: &str) -> Result<()> {
     println!("  [Client] Server has 1 image(s)");
     println!("\n  → {{\"jsonrpc\":\"2.0\",\"method\":\"hcp.ping\",\"params\":{{}},\"id\":99}}");
     println!("  ← {{\"jsonrpc\":\"2.0\",\"result\":{{\"server\":\"hcp-server\",\"status\":\"ok\"}},\"id\":99}}\n");
-    pb.finish_with_message(format!("{} Published to registry, served via JSON-RPC", style("✓").green()));
+    pb.finish_with_message(format!(
+        "{} Published to registry, served via JSON-RPC",
+        style("✓").green()
+    ));
 
     // Phase 4
     pb.set_message("PHASE 4: Simulating with ECC fault injection...");
@@ -55,9 +64,19 @@ pub fn run(output_dir: &str) -> Result<()> {
     };
     let sim_report = hcp_sim::run_simulation(sim_cfg)?;
     println!("\n  [Sim] Running 20-cycle clean simulation...\n");
-    println!("  Clean run: {} corrections, {} uncorrectable", sim_report.ecc_corrections, sim_report.ecc_uncorrectable);
-    println!("\n  Fault injection: {} corrections, {} detected uncorrectable", sim_report.ecc_corrections + 1, sim_report.ecc_uncorrectable);
-    pb.finish_with_message(format!("{} Simulated 20 cycles with ECC error injection", style("✓").green()));
+    println!(
+        "  Clean run: {} corrections, {} uncorrectable",
+        sim_report.ecc_corrections, sim_report.ecc_uncorrectable
+    );
+    println!(
+        "\n  Fault injection: {} corrections, {} detected uncorrectable",
+        sim_report.ecc_corrections + 1,
+        sim_report.ecc_uncorrectable
+    );
+    pb.finish_with_message(format!(
+        "{} Simulated 20 cycles with ECC error injection",
+        style("✓").green()
+    ));
 
     // Phase 5
     pb.set_message("PHASE 5: Preparing FPGA deployment...");
@@ -66,14 +85,21 @@ pub fn run(output_dir: &str) -> Result<()> {
     println!("  The full Modli cycle — now with proof:");
     println!("    1983: program → FM radio → tape → Galaksija (hope it works)");
     println!("    2026: module  → simulate → verify ECC → package → deploy (proven)\n");
-    pb.finish_with_message(format!("{} Demo complete — see {}/ for artifacts", style("✓").green(), output_dir));
+    pb.finish_with_message(format!(
+        "{} Demo complete — see {}/ for artifacts",
+        style("✓").green(),
+        output_dir
+    ));
 
     Ok(())
 }
 
 fn print_banner() {
     println!("╔══════════════════════════════════════════════════════════════════╗");
-    println!("║     HCP — Hardware Context Protocol v{}                      ║", env!("CARGO_PKG_VERSION"));
+    println!(
+        "║     HCP — Hardware Context Protocol v{}                      ║",
+        env!("CARGO_PKG_VERSION")
+    );
     println!("║     Compile → Package → Serve → Simulate → Deploy               ║");
     println!("║                                                                  ║");
     println!("║     Dedicated to the memory of Zoran Modli (1948-2020)           ║");
