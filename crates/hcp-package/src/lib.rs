@@ -31,10 +31,10 @@
 //!
 //! Same principle: encode, transmit, rebuild.
 
-pub mod manifest;
-pub mod image;
 pub mod builder;
+pub mod image;
+pub mod manifest;
 
-pub use manifest::*;
-pub use image::*;
 pub use builder::*;
+pub use image::*;
+pub use manifest::*;

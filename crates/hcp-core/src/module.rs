@@ -15,8 +15,8 @@
 //! - Output: count value
 //! - Internal: a register that increments each clock cycle
 
-use serde::{Deserialize, Serialize};
 use crate::types::*;
+use serde::{Deserialize, Serialize};
 
 /// A complete hardware module definition.
 ///
@@ -210,10 +210,20 @@ pub enum Expr {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub enum BinOpKind {
-    Add, Sub, Mul,
-    And, Or, Xor,
-    Eq, Ne, Lt, Gt, Le, Ge,
-    Shl, Shr,
+    Add,
+    Sub,
+    Mul,
+    And,
+    Or,
+    Xor,
+    Eq,
+    Ne,
+    Lt,
+    Gt,
+    Le,
+    Ge,
+    Shl,
+    Shr,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

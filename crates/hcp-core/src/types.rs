@@ -380,12 +380,12 @@ mod tests {
     #[test]
     fn test_hamming_parity_bits() {
         // These are well-known values from coding theory
-        assert_eq!(hamming_parity_bits(1), 2);   // (3,1) code
-        assert_eq!(hamming_parity_bits(4), 3);   // (7,4) code
-        assert_eq!(hamming_parity_bits(8), 4);   // (12,8) + 1 = 13 total
-        assert_eq!(hamming_parity_bits(16), 5);  // (21,16) + 1 = 22 total
-        assert_eq!(hamming_parity_bits(32), 6);  // (38,32) + 1 = 39 total
-        assert_eq!(hamming_parity_bits(64), 7);  // (71,64) + 1 = 72 total
+        assert_eq!(hamming_parity_bits(1), 2); // (3,1) code
+        assert_eq!(hamming_parity_bits(4), 3); // (7,4) code
+        assert_eq!(hamming_parity_bits(8), 4); // (12,8) + 1 = 13 total
+        assert_eq!(hamming_parity_bits(16), 5); // (21,16) + 1 = 22 total
+        assert_eq!(hamming_parity_bits(32), 6); // (38,32) + 1 = 39 total
+        assert_eq!(hamming_parity_bits(64), 7); // (71,64) + 1 = 72 total
     }
 
     #[test]

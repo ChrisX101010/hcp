@@ -59,10 +59,7 @@ impl HardwareImage {
         fs::create_dir_all(root.join("verilog"))?;
 
         // Write OCI layout marker — this tells tools "I'm an OCI image"
-        fs::write(
-            root.join("oci-layout"),
-            r#"{"imageLayoutVersion":"1.0.0"}"#,
-        )?;
+        fs::write(root.join("oci-layout"), r#"{"imageLayoutVersion":"1.0.0"}"#)?;
 
         Ok(HardwareImage {
             root: root.to_path_buf(),
@@ -89,10 +86,7 @@ impl HardwareImage {
         let digest_str = format!("sha256:{}", digest);
 
         // Write content-addressed blob
-        fs::write(
-            self.root.join("blobs/sha256").join(&digest),
-            content,
-        )?;
+        fs::write(self.root.join("blobs/sha256").join(&digest), content)?;
 
         // Record in manifest
         self.manifest.layers.push(LayerInfo {
@@ -110,10 +104,7 @@ impl HardwareImage {
         let digest = sha256_digest(report.as_bytes());
         let digest_str = format!("sha256:{}", digest);
 
-        fs::write(
-            self.root.join("blobs/sha256").join(&digest),
-            report,
-        )?;
+        fs::write(self.root.join("blobs/sha256").join(&digest), report)?;
 
         self.manifest.layers.push(LayerInfo {
             layer_type: LayerType::EccProofs,
@@ -130,7 +121,9 @@ impl HardwareImage {
     /// After this, the image is complete and ready for distribution.
     pub fn finalize(&self) -> std::io::Result<()> {
         // Write HCP manifest
-        let manifest_json = self.manifest.to_json()
+        let manifest_json = self
+            .manifest
+            .to_json()
             .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
         fs::write(self.root.join("hcp.json"), &manifest_json)?;
 
@@ -194,7 +187,8 @@ impl HardwareImage {
             result.layers_checked += 1;
 
             // Extract the hex digest from "sha256:abc123..."
-            let expected_hex = layer.digest
+            let expected_hex = layer
+                .digest
                 .strip_prefix("sha256:")
                 .unwrap_or(&layer.digest);
 
@@ -269,7 +263,12 @@ impl std::fmt::Display for VerifyResult {
         if self.is_ok() {
             write!(f, "✓ All {} layers verified OK", self.layers_ok)
         } else {
-            writeln!(f, "✗ {} of {} layers corrupted:", self.layers_corrupted.len(), self.layers_checked)?;
+            writeln!(
+                f,
+                "✗ {} of {} layers corrupted:",
+                self.layers_corrupted.len(),
+                self.layers_checked
+            )?;
             for err in &self.layers_corrupted {
                 writeln!(f, "  - {}", err)?;
             }
@@ -302,7 +301,8 @@ mod tests {
         let manifest = HcpManifest::new("test-hw", "1.0.0", "test", "tester");
 
         let mut img = HardwareImage::create(&dir, manifest).unwrap();
-        img.add_verilog_file("test.sv", "module test(); endmodule").unwrap();
+        img.add_verilog_file("test.sv", "module test(); endmodule")
+            .unwrap();
         img.finalize().unwrap();
 
         // Reopen and verify
@@ -319,7 +319,8 @@ mod tests {
         let manifest = HcpManifest::new("test-hw", "1.0.0", "test", "tester");
 
         let mut img = HardwareImage::create(&dir, manifest).unwrap();
-        img.add_verilog_file("mod.sv", "module m(); endmodule").unwrap();
+        img.add_verilog_file("mod.sv", "module m(); endmodule")
+            .unwrap();
         img.finalize().unwrap();
 
         let img2 = HardwareImage::open(&dir).unwrap();
@@ -336,7 +337,9 @@ mod tests {
         let manifest = HcpManifest::new("test-hw", "1.0.0", "test", "tester");
 
         let mut img = HardwareImage::create(&dir, manifest).unwrap();
-        let digest = img.add_verilog_file("mod.sv", "module m(); endmodule").unwrap();
+        let digest = img
+            .add_verilog_file("mod.sv", "module m(); endmodule")
+            .unwrap();
         img.finalize().unwrap();
 
         // Corrupt the blob by overwriting it
@@ -357,9 +360,12 @@ mod tests {
         let manifest = HcpManifest::new("test-hw", "1.0.0", "test", "tester");
 
         let mut img = HardwareImage::create(&dir, manifest).unwrap();
-        img.add_verilog_file("encoder.sv", "module enc(); endmodule").unwrap();
-        img.add_verilog_file("decoder.sv", "module dec(); endmodule").unwrap();
-        img.add_verilog_file("top.sv", "module top(); endmodule").unwrap();
+        img.add_verilog_file("encoder.sv", "module enc(); endmodule")
+            .unwrap();
+        img.add_verilog_file("decoder.sv", "module dec(); endmodule")
+            .unwrap();
+        img.add_verilog_file("top.sv", "module top(); endmodule")
+            .unwrap();
         img.finalize().unwrap();
 
         let files = img.list_verilog_files().unwrap();

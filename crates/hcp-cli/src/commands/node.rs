@@ -1,6 +1,6 @@
 use anyhow::Result;
 use clap::{Args, Subcommand};
-use hcp_protocol::{MeshNode, ImageRegistry};
+use hcp_protocol::{ImageRegistry, MeshNode};
 use std::sync::Arc;
 
 #[derive(Subcommand, Debug)]
@@ -32,10 +32,14 @@ pub fn run(cmd: NodeCmd) -> Result<()> {
                 if let Some(addr) = args.connect {
                     node.add_initial_peer(addr);
                 }
-                if let Err(e) = node.run().await { eprintln!("Mesh node error: {}", e); }
+                if let Err(e) = node.run().await {
+                    eprintln!("Mesh node error: {}", e);
+                }
             });
         }
-        NodeCmd::List => { println!("Peer listing requires a running node daemon."); }
+        NodeCmd::List => {
+            println!("Peer listing requires a running node daemon.");
+        }
     }
     Ok(())
 }

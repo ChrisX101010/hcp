@@ -138,12 +138,19 @@ impl VerilogEmitter {
         };
 
         let ecc_comment = if sig.has_ecc() {
-            format!(" // ECC: {:?} ({}b encoded)", sig.ecc, sig.encoded_width().bits())
+            format!(
+                " // ECC: {:?} ({}b encoded)",
+                sig.ecc,
+                sig.encoded_width().bits()
+            )
         } else {
             String::new()
         };
 
-        self.line(&format!("{} {}{};{}", kind, width_str, sig.name, ecc_comment));
+        self.line(&format!(
+            "{} {}{};{}",
+            kind, width_str, sig.name, ecc_comment
+        ));
     }
 
     fn emit_assignment(&mut self, assign: &Assignment) {
@@ -159,8 +166,17 @@ impl VerilogEmitter {
         self.indent += 1;
 
         for (i, (port, expr)) in inst.connections.iter().enumerate() {
-            let comma = if i < inst.connections.len() - 1 { "," } else { "" };
-            self.line(&format!(".{}({}){}", port, self.expr_to_string(expr), comma));
+            let comma = if i < inst.connections.len() - 1 {
+                ","
+            } else {
+                ""
+            };
+            self.line(&format!(
+                ".{}({}){}",
+                port,
+                self.expr_to_string(expr),
+                comma
+            ));
         }
 
         self.indent -= 1;
@@ -179,7 +195,11 @@ impl VerilogEmitter {
                     "always @({} {} or {} {})",
                     edge,
                     block.clock,
-                    if rst.active_high { "posedge" } else { "negedge" },
+                    if rst.active_high {
+                        "posedge"
+                    } else {
+                        "negedge"
+                    },
                     rst.signal,
                 )
             } else {
@@ -223,11 +243,7 @@ impl VerilogEmitter {
     fn emit_statement(&mut self, stmt: &Statement) {
         match stmt {
             Statement::Assign { target, value } => {
-                self.line(&format!(
-                    "{} <= {};",
-                    target,
-                    self.expr_to_string(value),
-                ));
+                self.line(&format!("{} <= {};", target, self.expr_to_string(value),));
             }
             Statement::If {
                 condition,
@@ -296,8 +312,7 @@ impl VerilogEmitter {
                 }
             }
             Expr::Concat(parts) => {
-                let parts_str: Vec<String> =
-                    parts.iter().map(|p| self.expr_to_string(p)).collect();
+                let parts_str: Vec<String> = parts.iter().map(|p| self.expr_to_string(p)).collect();
                 format!("{{{}}}", parts_str.join(", "))
             }
         }

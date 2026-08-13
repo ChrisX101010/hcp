@@ -16,7 +16,10 @@ pub enum FpgaError {
 pub type Result<T> = std::result::Result<T, FpgaError>;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub enum Board { Ice40, Ecp5 }
+pub enum Board {
+    Ice40,
+    Ecp5,
+}
 
 pub struct FpgaDeployer {
     pub board: Board,
@@ -38,9 +41,14 @@ impl FpgaDeployer {
         }
 
         tracing::info!("Running Yosys synthesis...");
-        let out = Command::new("yosys").arg("-s").arg(format!("{}/synth.ys", self.work_dir)).output()?;
+        let out = Command::new("yosys")
+            .arg("-s")
+            .arg(format!("{}/synth.ys", self.work_dir))
+            .output()?;
         if !out.status.success() {
-            return Err(FpgaError::SynthesisError(String::from_utf8_lossy(&out.stderr).into_owned()));
+            return Err(FpgaError::SynthesisError(
+                String::from_utf8_lossy(&out.stderr).into_owned(),
+            ));
         }
 
         tracing::info!("✓ Synthesis complete");

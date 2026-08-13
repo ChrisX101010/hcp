@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpStream;
-use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum TransportError {
@@ -52,14 +52,20 @@ pub struct PeerConnection {
 impl PeerConnection {
     pub async fn connect(addr: &str, peer_id: &str) -> Result<Self> {
         let stream = TcpStream::connect(addr).await?;
-        Ok(Self { stream, peer_id: peer_id.to_string() })
+        Ok(Self {
+            stream,
+            peer_id: peer_id.to_string(),
+        })
     }
-    
+
     // NEW: Constructor for wrapping an existing stream (for incoming connections)
     pub fn from_stream(stream: TcpStream, peer_id: &str) -> Self {
-        Self { stream, peer_id: peer_id.to_string() }
+        Self {
+            stream,
+            peer_id: peer_id.to_string(),
+        }
     }
-    
+
     pub async fn send(&mut self, msg: &Message) -> Result<()> {
         let json = serde_json::to_vec(msg)?;
         let len = json.len() as u32;
@@ -72,15 +78,23 @@ impl PeerConnection {
         let mut len_buf = [0u8; 4];
         match self.stream.read_exact(&mut len_buf).await {
             Ok(_) => {}
-            Err(e) if e.kind() == std::io::ErrorKind::UnexpectedEof => return Err(TransportError::Closed),
+            Err(e) if e.kind() == std::io::ErrorKind::UnexpectedEof => {
+                return Err(TransportError::Closed)
+            }
             Err(e) => return Err(e.into()),
         }
         let len = u32::from_be_bytes(len_buf) as usize;
-        if len == 0 || len > 10_000_000 { return Err(TransportError::InvalidLength(len)); }
+        if len == 0 || len > 10_000_000 {
+            return Err(TransportError::InvalidLength(len));
+        }
         let mut buf = vec![0u8; len];
         self.stream.read_exact(&mut buf).await?;
         Ok(serde_json::from_slice(&buf)?)
     }
-    pub fn peer_id(&self) -> &str { &self.peer_id }
-    pub fn into_inner(self) -> TcpStream { self.stream }
+    pub fn peer_id(&self) -> &str {
+        &self.peer_id
+    }
+    pub fn into_inner(self) -> TcpStream {
+        self.stream
+    }
 }

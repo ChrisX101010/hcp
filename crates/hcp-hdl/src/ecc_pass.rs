@@ -75,13 +75,28 @@ impl std::fmt::Display for EccReport {
         writeln!(f, "╔══════════════════════════════════════════════╗")?;
         writeln!(f, "║           HCP ECC Compiler Report            ║")?;
         writeln!(f, "╠══════════════════════════════════════════════╣")?;
-        writeln!(f, "║  Signals protected:  {:>4}                    ║", self.signals_protected)?;
-        writeln!(f, "║  Parity bits added:  {:>4}                    ║", self.parity_bits_added)?;
-        writeln!(f, "║  Total overhead:     {:>4} bits               ║", self.overhead_bits)?;
+        writeln!(
+            f,
+            "║  Signals protected:  {:>4}                    ║",
+            self.signals_protected
+        )?;
+        writeln!(
+            f,
+            "║  Parity bits added:  {:>4}                    ║",
+            self.parity_bits_added
+        )?;
+        writeln!(
+            f,
+            "║  Total overhead:     {:>4} bits               ║",
+            self.overhead_bits
+        )?;
         writeln!(f, "╠══════════════════════════════════════════════╣")?;
         for d in &self.details {
-            writeln!(f, "║  {:<20} {:>3}b → {:>3}b ({:>5.1}%) ║",
-                d.signal_name, d.data_width, d.encoded_width, d.overhead_percent)?;
+            writeln!(
+                f,
+                "║  {:<20} {:>3}b → {:>3}b ({:>5.1}%) ║",
+                d.signal_name, d.data_width, d.encoded_width, d.overhead_percent
+            )?;
         }
         writeln!(f, "╚══════════════════════════════════════════════╝")?;
         Ok(())
@@ -110,12 +125,14 @@ impl EccPass {
 
         // Collect all ECC-annotated signals
         let ecc_signals: Vec<(String, BitWidth, EccScheme)> = {
-            let port_signals = module.ports.iter().map(|p| {
-                (p.signal.name.clone(), p.signal.width, p.signal.ecc.clone())
-            });
-            let internal_signals = module.signals.iter().map(|s| {
-                (s.name.clone(), s.width, s.ecc.clone())
-            });
+            let port_signals = module
+                .ports
+                .iter()
+                .map(|p| (p.signal.name.clone(), p.signal.width, p.signal.ecc.clone()));
+            let internal_signals = module
+                .signals
+                .iter()
+                .map(|s| (s.name.clone(), s.width, s.ecc.clone()));
             port_signals
                 .chain(internal_signals)
                 .filter(|(_, _, ecc)| *ecc != EccScheme::None)
@@ -133,18 +150,15 @@ impl EccPass {
                     let dec = gen.generate_decoder();
 
                     // Add error flag output ports to the main module
-                    result_module.ports.push(Port::output(
-                        &format!("{}_err_correctable", name),
-                        1,
-                    ));
-                    result_module.ports.push(Port::output(
-                        &format!("{}_err_uncorrectable", name),
-                        1,
-                    ));
-                    result_module.ports.push(Port::output(
-                        &format!("{}_syndrome", name),
-                        gen.parity_bits,
-                    ));
+                    result_module
+                        .ports
+                        .push(Port::output(&format!("{}_err_correctable", name), 1));
+                    result_module
+                        .ports
+                        .push(Port::output(&format!("{}_err_uncorrectable", name), 1));
+                    result_module
+                        .ports
+                        .push(Port::output(&format!("{}_syndrome", name), gen.parity_bits));
 
                     // Add internal encoded register
                     result_module.signals.push(Signal {
@@ -209,10 +223,9 @@ impl EccPass {
                 }
                 EccScheme::Parity => {
                     // Simple parity — just XOR all bits for detection
-                    result_module.ports.push(Port::output(
-                        &format!("{}_parity_error", name),
-                        1,
-                    ));
+                    result_module
+                        .ports
+                        .push(Port::output(&format!("{}_parity_error", name), 1));
                     report.signals_protected += 1;
                     report.parity_bits_added += 1;
                     report.overhead_bits += 1;
@@ -268,7 +281,10 @@ mod tests {
         let module = make_test_counter();
         let result = EccPass::run(&module);
 
-        let port_names: Vec<&str> = result.module.ports.iter()
+        let port_names: Vec<&str> = result
+            .module
+            .ports
+            .iter()
             .map(|p| p.signal.name.as_str())
             .collect();
 
@@ -303,7 +319,10 @@ mod tests {
         let module = make_test_counter();
         let result = EccPass::run(&module);
 
-        let encoded = result.module.signals.iter()
+        let encoded = result
+            .module
+            .signals
+            .iter()
             .find(|s| s.name == "count_encoded");
         assert!(encoded.is_some());
         assert_eq!(encoded.unwrap().width.bits(), 13); // 8 + 4 + 1
@@ -314,9 +333,15 @@ mod tests {
         let module = make_test_counter();
         let result = EccPass::run(&module);
 
-        assert!(result.module.instances.iter()
+        assert!(result
+            .module
+            .instances
+            .iter()
             .any(|i| i.instance_name == "enc_count"));
-        assert!(result.module.instances.iter()
+        assert!(result
+            .module
+            .instances
+            .iter()
             .any(|i| i.instance_name == "dec_count"));
     }
 }

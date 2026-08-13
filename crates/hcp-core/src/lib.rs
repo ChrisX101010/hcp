@@ -23,17 +23,17 @@
 //! saved to files, sent over networks, and stored in registries. This is what
 //! enables "hardware as a package" — the OCI container images we'll build later.
 
-pub mod types;
-pub mod module;
 pub mod error;
+pub mod module;
+pub mod types;
 
-pub use types::*;
-pub use module::*;
 pub use error::*;
+pub use module::*;
+pub use types::*;
 
 /// Prelude — import everything you need with `use hcp_core::prelude::*`
 pub mod prelude {
-    pub use crate::types::*;
-    pub use crate::module::*;
     pub use crate::error::*;
+    pub use crate::module::*;
+    pub use crate::types::*;
 }

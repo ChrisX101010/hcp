@@ -230,19 +230,38 @@ impl HcpManifest {
     /// Print a human-readable summary.
     pub fn summary(&self) -> String {
         let mut s = String::new();
-        s.push_str(&format!("╔═══════════════════════════════════════════════════╗\n"));
-        s.push_str(&format!("║  HCP Hardware Image: {:<28}║\n", self.package.name));
+        s.push_str(&format!(
+            "╔═══════════════════════════════════════════════════╗\n"
+        ));
+        s.push_str(&format!(
+            "║  HCP Hardware Image: {:<28}║\n",
+            self.package.name
+        ));
         s.push_str(&format!("║  Version: {:<39}║\n", self.package.version));
-        s.push_str(&format!("╠═══════════════════════════════════════════════════╣\n"));
+        s.push_str(&format!(
+            "╠═══════════════════════════════════════════════════╣\n"
+        ));
         s.push_str(&format!("║  Author:  {:<39}║\n", self.package.author));
         s.push_str(&format!("║  License: {:<39}║\n", self.package.license));
-        s.push_str(&format!("║  ECC:     {} signals protected              ║\n",
-            self.ecc.signals_protected));
-        s.push_str(&format!("║  Targets: {:<39}║\n",
-            self.targets.iter().map(|t| t.name.as_str()).collect::<Vec<_>>().join(", ")));
-        s.push_str(&format!("║  Layers:  {:<39}║\n",
-            format!("{} content layers", self.layers.len())));
-        s.push_str(&format!("╚═══════════════════════════════════════════════════╝\n"));
+        s.push_str(&format!(
+            "║  ECC:     {} signals protected              ║\n",
+            self.ecc.signals_protected
+        ));
+        s.push_str(&format!(
+            "║  Targets: {:<39}║\n",
+            self.targets
+                .iter()
+                .map(|t| t.name.as_str())
+                .collect::<Vec<_>>()
+                .join(", ")
+        ));
+        s.push_str(&format!(
+            "║  Layers:  {:<39}║\n",
+            format!("{} content layers", self.layers.len())
+        ));
+        s.push_str(&format!(
+            "╚═══════════════════════════════════════════════════╝\n"
+        ));
         s
     }
 }

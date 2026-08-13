@@ -17,7 +17,9 @@ pub struct ImageRegistry {
 }
 
 impl ImageRegistry {
-    pub fn new() -> Self { Self::default() }
+    pub fn new() -> Self {
+        Self::default()
+    }
     pub fn publish(&self, img: HardwareImage) {
         let key = format!("{}:{}", img.name, img.version);
         self.images.write().unwrap().insert(key, img);

@@ -30,10 +30,10 @@
 
 use std::path::Path;
 
+use crate::image::*;
+use crate::manifest::*;
 use hcp_core::prelude::*;
 use hcp_hdl::{EccPass, VerilogEmitter};
-use crate::manifest::*;
-use crate::image::*;
 
 /// Builder for creating HCP Hardware Images from Module definitions.
 pub struct ImageBuilder {
@@ -117,12 +117,8 @@ impl ImageBuilder {
         let output_path = Path::new(output_dir);
 
         // Create the manifest
-        let mut manifest = HcpManifest::new(
-            &self.name,
-            &self.version,
-            &self.description,
-            &self.author,
-        );
+        let mut manifest =
+            HcpManifest::new(&self.name, &self.version, &self.description, &self.author);
         manifest.targets = self.targets;
 
         // Create the image directory
@@ -265,8 +261,12 @@ mod tests {
 
         // Verify the build produced what we expect
         assert_eq!(result.verilog_files.len(), 3); // enc, dec, main
-        assert!(result.verilog_files.contains(&"hamming_enc_8.sv".to_string()));
-        assert!(result.verilog_files.contains(&"hamming_dec_8.sv".to_string()));
+        assert!(result
+            .verilog_files
+            .contains(&"hamming_enc_8.sv".to_string()));
+        assert!(result
+            .verilog_files
+            .contains(&"hamming_dec_8.sv".to_string()));
         assert!(result.verilog_files.contains(&"counter_ecc.sv".to_string()));
         assert!(result.verify_result.contains("verified OK"));
 
